@@ -1,0 +1,156 @@
+
+<html>
+<head>
+  <title>Pet Adoption Portal</title>
+  <style>
+   .pet-image {
+  width: 200px;  /* Adjust the desired width */
+  height: 200px; /* Adjust the desired height */
+  object-fit: cover;
+}
+
+  </style>
+</head>
+<body>
+  <h1>Pet Adoption Portal</h1>
+
+  <div class="pet-list">
+    <!-- Pet cards will be dynamically generated here -->
+  </div>
+
+  <!-- Modal for Adoption Form -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Adoption Form</h2>
+      <form id="adoption-form">
+        <label for="name">Name:</label>
+        <input type="text" id="name" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" required>
+
+        <label for="phone">Phone:</label>
+        <input type="tel" id="phone" required>
+
+        <label for="message">Message:</label>
+        <textarea id="message" required></textarea>
+
+        <input type="file" accept="image/*" capture="camera" id="photo-input" required>
+        <img id="preview" alt="Preview Image">
+
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Dummy pet data (replace with actual data from the server)
+    var pets = [
+      {
+        name: "Bulldog",
+        image: "pet1.jpg",
+      },
+      {
+        name: "poodle",
+        image: "pet2.jpeg",
+      
+      }
+      //you can write as many pets details you want
+    ];
+
+    // Generate pet cards dynamically
+    var petList = document.querySelector('.pet-list');
+    pets.forEach(function(pet) {
+      var card = document.createElement('div');
+      card.className = 'pet-card';
+
+      var image = document.createElement('img');
+      image.src = pet.image;
+      image.alt = pet.name;
+      image.className = 'pet-image';
+
+      var name = document.createElement('h2');
+      name.className = 'pet-name';
+      name.textContent = pet.name;
+
+      var description = document.createElement('p');
+      description.className = 'pet-description';
+      description.textContent = pet.description;
+
+      var adoptButton = document.createElement('button');
+      adoptButton.className = 'adopt-button';
+      adoptButton.textContent = 'Adopt';
+      adoptButton.addEventListener('click', function() {
+        openModal(pet.name);
+      });
+
+      card.appendChild(image);
+      card.appendChild(name);
+      card.appendChild(description);
+      card.appendChild(adoptButton);
+
+      petList.appendChild(card);
+    });
+
+    // Modal functionality
+    var modal = document.getElementById("modal");
+    var closeButton = document.getElementsByClassName("close")[0];
+
+    function openModal(petName) {
+      modal.style.display = "block";
+      document.getElementById("name").focus();
+    }
+
+    closeButton.addEventListener('click', function() {
+      modal.style.display = "none";
+    });
+
+    window.addEventListener('click', function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    });
+
+    // Photo preview functionality
+    var photoInput = document.getElementById("photo-input");
+    var preview = document.getElementById("preview");
+
+    photoInput.addEventListener('change', function(event) {
+      var file = event.target.files[0];
+      var reader = new FileReader();
+
+      reader.onload = function(e) {
+        preview.src = e.target.result;
+      };
+
+      reader.readAsDataURL(file);
+    });
+
+    // Form submission handling
+    var adoptionForm = document.getElementById("adoption-form");
+    adoptionForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      var name = document.getElementById("name").value;
+      var email = document.getElementById("email").value;
+      var phone = document.getElementById("phone").value;
+      var message = document.getElementById("message").value;
+      var photo = document.getElementById("photo-input").files[0];
+
+      // Perform further actions with the form data and photo
+      console.log("Name:", name);
+      console.log("Email:", email);
+      console.log("Phone:", phone);
+      console.log("Message:", message);
+      console.log("Photo:", photo);
+
+      // Clear the form fields
+      adoptionForm.reset();
+      preview.src = "";
+      modal.style.display = "none";
+      alert("Thank you for your submission!");
+    });
+  </script>
+</body>
+</html>
